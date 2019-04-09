@@ -1,0 +1,149 @@
+buildscript {
+    ext {
+        kotlinVersion = '1.3.21'
+        springBootVersion = '2.1.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath( "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}" )
+        classpath( "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}" )
+        classpath( "org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}" )
+        classpath( "org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}" )
+    }
+}
+
+
+plugins {
+    // Versioning plugin
+    id 'pl.allegro.tech.build.axion-release' version '1.9.3'
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
+apply plugin: 'kotlin-jpa'
+apply plugin: 'kotlin-allopen'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+// Publishing to a maven repo
+apply plugin: 'maven-publish'
+
+// Define the namespace for our build artifacts
+group 'atc'
+
+// Explicitly declare that we're using JDK 1.8
+sourceCompatibility = 1.8
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '1.8'
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '1.8'
+    }
+}
+
+// Convenience to let JPA work with Kotlin
+allOpen {
+    annotation( 'javax.persistence.Entity' )
+}
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Spring Security
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+    compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: '2.1.3.RELEASE'
+
+    // Kotlin
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    kapt 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // OpenAPI (aka Swagger)
+    compile 'io.springfox:springfox-swagger2:2.9.2'
+
+    // Enable JSON logging
+    runtime( group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '5.3' ) {
+        exclude group: 'ch.qos.logback', module: 'logback-core'
+    }
+
+    // For development
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
+
+    // Testing with JUnit 5 and MockK
+    testImplementation( 'org.springframework.boot:spring-boot-starter-test' ) {
+        exclude module: 'junit'
+        exclude module: 'mockito-core'
+    }
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation 'com.ninja-squad:springmockk:1.1.0'
+}
+
+// Versioning with the Axion release plugin
+scmVersion {
+
+    // Treat uncommitted changes as trigger for version increment
+    ignoreUncommittedChanges = true
+
+    // All versions will start with "v"
+    tag {
+        prefix = 'v'
+        versionSeparator = ''
+    }
+
+    // Our versioning scheme is major.minor.rcX. If we're on a branch named "release/*", increment the release
+    // candidate number, otherwise increment the minor version number.
+    versionIncrementer 'incrementMinorIfNotOnRelease', [releaseBranchPattern: 'release.*']
+    branchVersionIncrementer = [
+          'master'    : 'incrementMinor',
+          'feature'   : 'incrementMinor',
+          'release/.*': 'incrementPrerelease'
+    ]
+
+    // Decorators
+    versionCreator 'simple'
+    branchVersionCreator = [
+          'feature/.*': 'versionWithBranch'
+    ]
+
+    checks {
+        // Allow for releasing a new version if there are uncommitted changes
+        uncommittedChanges = false
+    }
+}
+project.version = scmVersion.version
+
+// Executable jar support
+springBoot {
+    mainClassName = "atc.chassis.ApplicationKt"
+}
+bootJar {
+    launchScript()
+}
+
+// Configure the Gradle wrapper
+wrapper {
+    gradleVersion = '4.10.3'
+}
