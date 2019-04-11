@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.time.OffsetDateTime
 
 
 @RestController
@@ -19,14 +21,22 @@ class ContactRestController(val contactService: ContactService) {
     @GetMapping("/")
     @PreAuthorize("#oauth2.hasScope('read_contacts')")
     fun getContacts(): ResponseEntity<List<Contact>> {
-        log.info("inside GET /contacts")
-
         val contactEntities = contactService.findContacts()
         val contactModels = contactEntities.map {
             transformEntityToModel(it)
         }
 
         return ResponseEntity(contactModels, HttpStatus.OK)
+    }
+
+    @PostMapping("/")
+    @PreAuthorize("#oauth2.hasScope('write_contacts')")
+    fun createContact(contact: Contact): ResponseEntity<Contact> {
+        val contactEntity = transformModelToEntity(contact)
+        val savedContactEntity = contactService.createContact(contactEntity)
+        val savedContact = transformEntityToModel(savedContactEntity)
+
+        return ResponseEntity(savedContact, HttpStatus.CREATED);
     }
 
     fun transformEntityToModel(entity: ContactEntity): Contact {
@@ -37,6 +47,17 @@ class ContactRestController(val contactService: ContactService) {
             phone = entity.phone,
             createdDate = entity.createdOn,
             lastModifiedDate = entity.updatedOn
+        )
+    }
+
+    fun transformModelToEntity(model: Contact): ContactEntity {
+        return ContactEntity(
+            id = model.id,
+            name = model.name,
+            email = model.email,
+            phone = model.phone,
+            createdOn = model.createdDate ?: OffsetDateTime.now(),
+            updatedOn = model.lastModifiedDate ?: OffsetDateTime.now()
         )
     }
 
