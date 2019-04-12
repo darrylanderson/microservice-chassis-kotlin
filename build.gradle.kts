@@ -91,8 +91,12 @@ dependencies {
 springBoot {
     mainClassName = "atc.chassis.ApplicationKt"
 }
+tasks.getByName<Jar>("jar") {
+    enabled = true
+}
 tasks.withType<BootJar> {
     launchScript()
+    classifier = "boot"
 }
 
 
@@ -109,21 +113,19 @@ scmVersion {
 
     // Our versioning scheme is major.minor.rcX. If we're on a branch named "release/*", increment the release
     // candidate number, otherwise increment the minor version number.
-    versionIncrementer("incrementMinorIfNotOnRelease", mapOf(Pair(releaseBranchPattern, "release.*")))
+    versionIncrementer("incrementMinorIfNotOnRelease", mapOf(releaseBranchPattern to "release.*"))
     branchVersionIncrementer(
         mapOf(
-            Pair("master", "incrementMinor"),
-            Pair("feature", "incrementMinor"),
-            Pair("release/.*", "incrementPrerelease")
+            "master" to "incrementMinor",
+            "feature" to "incrementMinor",
+            "release/.*" to "incrementPrerelease"
         )
     )
 
     // Decorators
     versionCreator("simple")
     branchVersionCreator(
-        mapOf(
-            Pair("feature/.*", "versionWithBranch")
-        )
+        mapOf("feature/.*" to "versionWithBranch")
     )
 
     checks(closureOf<ChecksConfig> {
