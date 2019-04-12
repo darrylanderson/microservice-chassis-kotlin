@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
+import pl.allegro.tech.build.axion.release.domain.ChecksConfig
+import pl.allegro.tech.build.axion.release.domain.TagNameSerializationConfig
 
 plugins {
     val kotlinVersion = "1.3.30"
@@ -92,6 +94,54 @@ springBoot {
 tasks.withType<BootJar> {
     launchScript()
 }
+
+
+// Versioning with the Axion release plugin
+scmVersion {
+    // Treat uncommitted changes as trigger for version increment
+    ignoreUncommittedChanges = true
+
+    // All versions will start with "v"
+    tag(closureOf<TagNameSerializationConfig> {
+        prefix = "v"
+        versionSeparator = ""
+    })
+
+    // Our versioning scheme is major.minor.rcX. If we're on a branch named "release/*", increment the release
+    // candidate number, otherwise increment the minor version number.
+    versionIncrementer("incrementMinorIfNotOnRelease", mapOf(Pair(releaseBranchPattern, "release.*")))
+    branchVersionIncrementer(
+        mapOf(
+            Pair("master", "incrementMinor"),
+            Pair("feature", "incrementMinor"),
+            Pair("release/.*", "incrementPrerelease")
+        )
+    )
+
+    // Decorators
+    versionCreator("simple")
+    branchVersionCreator(
+        mapOf(
+            Pair("feature/.*", "versionWithBranch")
+        )
+    )
+
+    checks(closureOf<ChecksConfig> {
+        // Allow for releasing a new version if there are uncommitted changes
+        uncommittedChanges = false
+    })
+}
+project.version = scmVersion.version
+
+
+// Add the version number to the manifest
+tasks.withType<Jar> {
+    manifest {
+        attributes["Implementation-Title"] = project.name
+        attributes["Implementation-Version"] = project.version.toString()
+    }
+}
+
 
 // Configure the Gradle wrapper
 tasks.withType<Wrapper> {
