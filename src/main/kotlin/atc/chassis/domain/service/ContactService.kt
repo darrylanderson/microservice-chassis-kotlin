@@ -1,7 +1,7 @@
-package atc.chassis.service
+package atc.chassis.domain.service
 
-import atc.chassis.entity.ContactEntity
-import atc.chassis.repository.ContactRepository
+import atc.chassis.domain.entity.ContactEntity
+import atc.chassis.domain.repository.ContactRepository
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,15 +15,11 @@ class ContactService(val contactRepository: ContactRepository) {
         return contactRepository.save(contactEntity)
     }
 
-    fun findContacts(): Iterable<ContactEntity> {
+    fun listContacts(): Iterable<ContactEntity> {
         return contactRepository.findAll()
     }
 
-    fun findContactByEmail(email: String): Iterable<ContactEntity> {
-        return contactRepository.findByEmail(email)
-    }
-
-    fun queryContacts(spec: Specification<ContactEntity>): Iterable<ContactEntity> {
+    fun queryContacts(spec: Specification<ContactEntity>?): Iterable<ContactEntity> {
         return contactRepository.findAll(spec)
     }
 }

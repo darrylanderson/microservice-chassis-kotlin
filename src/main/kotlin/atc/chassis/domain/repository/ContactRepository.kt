@@ -1,6 +1,6 @@
-package atc.chassis.repository
+package atc.chassis.domain.repository
 
-import atc.chassis.entity.ContactEntity
+import atc.chassis.domain.entity.ContactEntity
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.repository.CrudRepository
 

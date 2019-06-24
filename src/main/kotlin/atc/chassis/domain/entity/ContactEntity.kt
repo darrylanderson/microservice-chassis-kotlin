@@ -1,4 +1,4 @@
-package atc.chassis.entity
+package atc.chassis.domain.entity
 
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.CreatedDate

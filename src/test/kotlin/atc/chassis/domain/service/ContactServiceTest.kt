@@ -1,7 +1,7 @@
-package atc.chassis.service
+package atc.chassis.domain.service
 
-import atc.chassis.entity.ContactEntity
-import atc.chassis.repository.ContactRepository
+import atc.chassis.domain.entity.ContactEntity
+import atc.chassis.domain.repository.ContactRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest

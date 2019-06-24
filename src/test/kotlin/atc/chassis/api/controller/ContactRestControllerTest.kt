@@ -1,8 +1,8 @@
 package atc.chassis.api.controller
 
 import atc.chassis.api.model.Contact
-import atc.chassis.entity.ContactEntity
-import atc.chassis.service.ContactService
+import atc.chassis.domain.entity.ContactEntity
+import atc.chassis.domain.service.ContactService
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
@@ -33,7 +33,7 @@ internal class ContactRestControllerTest(@Autowired val mockMvc: MockMvc) {
         // Setup mock service implementation
         val testContactEntity1 = ContactEntity(0, "testcontact1", "testcontact1@email.com", "555-555-5555")
         val testContactEntity2 = ContactEntity(1, "testcontact2", "testcontact2@email.com", "555-555-5555")
-        every { contactService.findContacts() } returns listOf(testContactEntity1, testContactEntity2)
+        every { contactService.listContacts() } returns listOf(testContactEntity1, testContactEntity2)
 
         mockMvc.perform(get("/contacts").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)
