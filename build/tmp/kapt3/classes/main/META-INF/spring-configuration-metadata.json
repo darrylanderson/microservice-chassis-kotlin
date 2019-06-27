@@ -1,0 +1,65 @@
+{
+  "groups": [
+    {
+      "name": "rest.security",
+      "type": "atc.chassis.config.security.SecurityProperties",
+      "sourceType": "atc.chassis.config.security.SecurityProperties"
+    },
+    {
+      "name": "rest.security.cors",
+      "type": "atc.chassis.config.security.SecurityProperties$Cors",
+      "sourceType": "atc.chassis.config.security.SecurityProperties",
+      "sourceMethod": "getCors()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "rest.security.api-matcher",
+      "type": "java.lang.String",
+      "sourceType": "atc.chassis.config.security.SecurityProperties"
+    },
+    {
+      "name": "rest.security.cors.allow-credentials",
+      "type": "java.lang.Boolean",
+      "sourceType": "atc.chassis.config.security.SecurityProperties$Cors",
+      "defaultValue": false
+    },
+    {
+      "name": "rest.security.cors.allowed-headers",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "atc.chassis.config.security.SecurityProperties$Cors"
+    },
+    {
+      "name": "rest.security.cors.allowed-methods",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "atc.chassis.config.security.SecurityProperties$Cors"
+    },
+    {
+      "name": "rest.security.cors.allowed-origins",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "atc.chassis.config.security.SecurityProperties$Cors"
+    },
+    {
+      "name": "rest.security.cors.exposed-headers",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "atc.chassis.config.security.SecurityProperties$Cors"
+    },
+    {
+      "name": "rest.security.cors.max-age",
+      "type": "java.lang.Long",
+      "sourceType": "atc.chassis.config.security.SecurityProperties$Cors",
+      "defaultValue": 0
+    },
+    {
+      "name": "rest.security.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "atc.chassis.config.security.SecurityProperties"
+    },
+    {
+      "name": "rest.security.issuer-uri",
+      "type": "java.lang.String",
+      "sourceType": "atc.chassis.config.security.SecurityProperties"
+    }
+  ],
+  "hints": []
+}

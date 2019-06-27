@@ -13,7 +13,7 @@ import java.util.*
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = ["atc.chassis.repository"])
+@EnableJpaRepositories(basePackages = ["atc.chassis.domain.repository"])
 @EnableJpaAuditing(dateTimeProviderRef = "auditingDateTimeProvider")
 class JpaConfig {
 

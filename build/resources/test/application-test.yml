@@ -1,0 +1,3 @@
+rest:
+  security:
+    enabled: false
