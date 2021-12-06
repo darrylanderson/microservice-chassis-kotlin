@@ -4,17 +4,18 @@ import pl.allegro.tech.build.axion.release.domain.ChecksConfig
 import pl.allegro.tech.build.axion.release.domain.TagNameSerializationConfig
 
 plugins {
-    val kotlinVersion = "1.3.30"
+    val kotlinVersion = "1.4.32"
 
     // Spring Boot
-    id("org.springframework.boot") version "2.1.4.RELEASE"
-    id("io.spring.dependency-management") version "1.0.6.RELEASE"
+    id("org.springframework.boot") version "2.4.4"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
 
     // Kotlin
-    id("org.jetbrains.kotlin.jvm") version kotlinVersion
-    id("org.jetbrains.kotlin.kapt") version kotlinVersion
-    id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
-    id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
+    kotlin("jvm") version kotlinVersion
+    kotlin("kapt") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion
+    kotlin("plugin.allopen") version kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
 
     // Versioning plugin
     id("pl.allegro.tech.build.axion-release") version "1.9.3"
@@ -26,10 +27,10 @@ plugins {
 // Define the namespace for our build artifacts
 group = "atc"
 
-// Explicitly declare that we're using JDK 1.8
+// Explicitly declare that we're using JDK 11
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
         freeCompilerArgs = listOf("-Xjsr305=strict")
     }
 }
@@ -52,10 +53,11 @@ dependencies {
     // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 
     // Spring Security
-    compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.4.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.4.RELEASE")
 
     // Kotlin
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -64,10 +66,10 @@ dependencies {
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     // OpenAPI (aka Swagger)
-    compile("io.springfox:springfox-swagger2:2.9.2")
+    implementation("io.springfox:springfox-swagger2:3.0.0")
 
     // Enable JSON logging
-    runtime("net.logstash.logback:logstash-logback-encoder:5.3") {
+    implementation("net.logstash.logback:logstash-logback-encoder:7.0.1") {
         exclude(module = "logback-core")
     }
 
@@ -76,20 +78,20 @@ dependencies {
     runtimeOnly("com.h2database:h2")
 
     // Testing with JUnit 5 and MockK
-    testCompile("org.springframework.boot:spring-boot-starter-test") {
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "junit")
         exclude(module = "mockito-core")
     }
-    testCompile("org.junit.jupiter:junit-jupiter-api")
-    testCompile("org.junit.jupiter:junit-jupiter-engine")
-    testCompile("io.mockk:mockk:1.9.3")
-    testCompile("com.ninja-squad:springmockk:1.1.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("io.mockk:mockk:1.9.3")
+    testImplementation("com.ninja-squad:springmockk:1.1.1")
 }
 
 
 // Executable jar support
 springBoot {
-    mainClassName = "atc.chassis.ApplicationKt"
+    mainClass.set("atc.chassis.ApplicationKt")
 }
 tasks.getByName<Jar>("jar") {
     enabled = true
@@ -147,5 +149,5 @@ tasks.withType<Jar> {
 
 // Configure the Gradle wrapper
 tasks.withType<Wrapper> {
-    gradleVersion = "5.3.1"
+    gradleVersion = "6.9"
 }

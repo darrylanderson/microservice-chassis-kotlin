@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
-import com.fasterxml.jackson.databind.node.TextNode
 import org.slf4j.LoggerFactory
 import org.springframework.core.MethodParameter
 import org.springframework.http.MediaType
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
 import springfox.documentation.spring.web.json.Json
 import springfox.documentation.swagger2.web.Swagger2Controller
-import java.util.*
 
 
 /**
@@ -36,20 +34,20 @@ import java.util.*
 class SwaggerPostProcessorAdvice : ResponseBodyAdvice<Any> {
 
     override fun supports(
-            returnType: MethodParameter,
-            converterType: Class<out HttpMessageConverter<*>>
+        returnType: MethodParameter,
+        converterType: Class<out HttpMessageConverter<*>>
     ): Boolean {
         return true
     }
 
 
     override fun beforeBodyWrite(
-            body: Any?,
-            returnType: MethodParameter,
-            selectedContentType: MediaType,
-            selectedConverterType: Class<out HttpMessageConverter<*>>,
-            request: ServerHttpRequest,
-            response: ServerHttpResponse
+        body: Any?,
+        returnType: MethodParameter,
+        selectedContentType: MediaType,
+        selectedConverterType: Class<out HttpMessageConverter<*>>,
+        request: ServerHttpRequest,
+        response: ServerHttpResponse
     ): Any? {
         try {
             val objectMapper = ObjectMapper()
@@ -72,27 +70,6 @@ class SwaggerPostProcessorAdvice : ResponseBodyAdvice<Any> {
     }
 
 
-    /**
-     * Add Redoc supported vendor extension properties such as x-logo.
-     *
-     * @param parent    parent node
-     * @param fieldName name of field to append to
-     * @throws JsonProcessingException json processing exception
-     */
-    private fun addLogoUrl(
-            parent: JsonNode,
-            fieldName: String
-    ) {
-        if (parent.has(fieldName)) {
-            val infoNode = parent.get(fieldName)
-
-            val logoNode = JsonNodeFactory.instance.objectNode()
-            logoNode.put("url", "/image/yourlogo.png")
-            (infoNode as ObjectNode).set("x-logo", logoNode)
-        }
-    }
-
-
     @Throws(JsonProcessingException::class)
     private fun addTagGroups(parent: JsonNode) {
         // Accounts Tag Group
@@ -107,26 +84,6 @@ class SwaggerPostProcessorAdvice : ResponseBodyAdvice<Any> {
         groups.add(contactGroup)
 
         (parent as ObjectNode).putArray("x-tagGroups").addAll(groups)
-    }
-
-
-    private fun sanitize(
-            parent: JsonNode,
-            fieldName: String
-    ) {
-        if (parent.has(fieldName)) {
-            val text = parent.get(fieldName).textValue()
-            if (null != text) {
-                val pos = text.indexOf("_")
-                if (pos > -1) {
-                    (parent as ObjectNode).set(fieldName, TextNode(text.substring(0, pos)))
-                }
-            }
-        }
-
-        for (child in parent) {
-            this.sanitize(child, fieldName)
-        }
     }
 
     companion object {
