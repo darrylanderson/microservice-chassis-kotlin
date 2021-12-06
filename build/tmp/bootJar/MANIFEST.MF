@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: microservice-chassis-kotlin
-Implementation-Version: 0.1.0-SNAPSHOT
-Start-Class: atc.chassis.ApplicationKt
-Spring-Boot-Classes: BOOT-INF/classes/
-Spring-Boot-Lib: BOOT-INF/lib/
-Spring-Boot-Version: 2.1.4.RELEASE
-Main-Class: org.springframework.boot.loader.JarLauncher
-
