@@ -11,11 +11,7 @@ import org.springframework.web.cors.CorsConfiguration
 @ConfigurationProperties(prefix = "rest.security")
 class SecurityProperties {
 
-    var isEnabled: Boolean? = true
-
     lateinit var apiMatcher: String
-
-    lateinit var issuerUri: String
 
     val cors = Cors()
 

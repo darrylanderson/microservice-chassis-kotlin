@@ -20,7 +20,7 @@ import java.util.regex.Pattern
 
 @RestController
 @RequestMapping("/contacts")
-interface IContactRestController {
+interface ContactRestController {
 
     @ApiOperation(
             value = "List contacts",
@@ -110,7 +110,7 @@ interface IContactRestController {
 }
 
 
-class ContactRestController(val contactService: ContactService) : IContactRestController {
+class ContactRestControllerImpl(val contactService: ContactService) : ContactRestController {
 
     override fun listContacts(): ResponseEntity<List<Contact>> {
         val contactEntities = contactService.listContacts()
