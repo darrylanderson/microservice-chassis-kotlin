@@ -18,7 +18,7 @@ plugins {
     kotlin("plugin.jpa") version kotlinVersion
 
     // Versioning plugin
-    id("pl.allegro.tech.build.axion-release") version "1.9.3"
+    id("pl.allegro.tech.build.axion-release") version "1.13.6"
 
     // Publishing
     `maven-publish`
