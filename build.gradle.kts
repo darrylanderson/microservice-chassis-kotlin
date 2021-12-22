@@ -1,13 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import pl.allegro.tech.build.axion.release.domain.ChecksConfig
 import pl.allegro.tech.build.axion.release.domain.TagNameSerializationConfig
 
 plugins {
     val kotlinVersion = "1.4.32"
 
     // Spring Boot
-    id("org.springframework.boot") version "2.6.1"
+    id("org.springframework.boot") version "2.6.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 
     // Kotlin
@@ -22,6 +21,9 @@ plugins {
 
     // Publishing
     `maven-publish`
+
+    // Detekt
+    id("io.gitlab.arturbosch.detekt") version "1.19.0"
 }
 
 // Define the namespace for our build artifacts
@@ -79,7 +81,7 @@ dependencies {
 
     // For development
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("com.h2database:h2:2.0.202")
 
     // Testing with JUnit 5 and MockK
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -91,7 +93,6 @@ dependencies {
     testImplementation("io.mockk:mockk:1.12.1")
     testImplementation("com.ninja-squad:springmockk:3.1.0")
 }
-
 
 // Executable jar support
 springBoot {
@@ -105,15 +106,18 @@ tasks.withType<BootJar> {
     classifier = "boot"
 }
 
-tasks.register("resolveAndLockAll") {
-    doFirst {
-        require(gradle.startParameter.isWriteDependencyLocks)
-    }
-    doLast {
-        configurations.filter {
-            // Add any custom filtering on the configurations to be resolved
-            it.isCanBeResolved
-        }.forEach { it.resolve() }
+detekt {
+    ignoreFailures = true
+    buildUponDefaultConfig = true
+    allRules = true
+    basePath = projectDir.toString()
+    parallel = true
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    reports {
+        xml.required.set(true)
+        sarif.required.set(true)
     }
 }
 
@@ -123,10 +127,12 @@ scmVersion {
     ignoreUncommittedChanges = true
 
     // All versions will start with "v"
-    tag(closureOf<TagNameSerializationConfig> {
-        prefix = "v"
-        versionSeparator = ""
-    })
+    tag(
+        closureOf<TagNameSerializationConfig> {
+            prefix = "v"
+            versionSeparator = ""
+        }
+    )
 
     // Our versioning scheme is major.minor.rcX. If we're on a branch named "release/*", increment the release
     // candidate number, otherwise increment the minor version number.
@@ -144,14 +150,8 @@ scmVersion {
     branchVersionCreator(
         mapOf("feature/.*" to "versionWithBranch")
     )
-
-    checks(closureOf<ChecksConfig> {
-        // Allow for releasing a new version if there are uncommitted changes
-        uncommittedChanges = false
-    })
 }
 project.version = scmVersion.version
-
 
 // Add the version number to the manifest
 tasks.withType<Jar> {
@@ -160,7 +160,6 @@ tasks.withType<Jar> {
         attributes["Implementation-Version"] = project.version.toString()
     }
 }
-
 
 // Configure the Gradle wrapper
 tasks.withType<Wrapper> {
