@@ -106,6 +106,14 @@ tasks.withType<BootJar> {
     classifier = "boot"
 }
 
+detekt {
+    ignoreFailures = true
+    buildUponDefaultConfig = true
+    allRules = true
+    basePath = rootProject.projectDir.parentFile.absolutePath
+    parallel = true
+}
+
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
     reports {
         xml.required.set(true)
