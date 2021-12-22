@@ -110,7 +110,7 @@ detekt {
     ignoreFailures = true
     buildUponDefaultConfig = true
     allRules = true
-    basePath = rootProject.projectDir.parentFile.absolutePath
+    basePath = projectDir.toString()
     parallel = true
 }
 
