@@ -1,78 +1,78 @@
-server:
+server :
   # Listening port
-  port: 8080
+  port : 8080
   # Hide the server version
-  server-header: Apache
+  server-header : Apache
 
 
-spring:
-  http:
+spring :
+  http :
     # Character set encoding
-    encoding:
-      enabled: true
-      force: true
+    encoding :
+      enabled : true
+      force : true
   # Send distributed traces to zipkin server (using Eureka to find the server)
-  sleuth:
-    sampler:
-      percentage: 1.0
-  zipkin:
-    baseUrl: http://zipkin-service/
+  sleuth :
+    sampler :
+      percentage : 1.0
+  zipkin :
+    baseUrl : http://zipkin-service/
 
 
 # Can be set to false to disable security during local development
-rest:
-  security:
-    enabled: true
-    api-matcher: '/api/**'
-    issuer-uri: http://localhost:8080/auth/realms/dev
-    cors:
-      allowed-origins: '*'
-      allowed-headers: '*'
-      allowed-methods: 'GET,POST,PUT,PATCH,DELETE,OPTIONS'
-      max-age: 3600
+rest :
+  security :
+    enabled : true
+    api-matcher : '/api/**'
+    issuer-uri : http://localhost:8080/auth/realms/dev
+    cors :
+      allowed-origins : '*'
+      allowed-headers : '*'
+      allowed-methods : 'GET,POST,PUT,PATCH,DELETE,OPTIONS'
+      max-age : 3600
 
 
-security:
-  oauth2:
+security :
+  oauth2 :
     # Resource server config
-    resource:
-      id: department-service
-      token-info-uri: '${rest.security.issuer-uri}/protocol/openid-connect/token/introspect'
-      user-info-uri: '${rest.security.issuer-uri}/protocol/openid-connect/userinfo'
-      jwt.key-value: -----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4tW2IZn+axOw4ByqBGc4yWLcOUBBDiapKddgXdK5MWHpA8yqgmXsxXzwUHFIVTaCY9JvxpYyCkbaPA64nML1oHGxZ10qWzAyYSqFYnZGhZo6P83LDHqqB8Vuqbr5ZjU7EpUKv4+cWi1zE3D5WDsRfhkv+sLIGbd61OhFT7YBA5kBZe1zx8siP7YF6soiZZUAbcGMnN6idxsJr88ClAAiRiK0805U4nbmOUzsltXHsbMnS5Sl8AIFbjW0Sx0VluVQaraVvZj9VGbc634cVzNc7zErVYxfaFkdwd+iHqhEO0aqi7/fFlJE32Ou8DzWO1WIiteIRrBWi+g+aZlaCnLw0QIDAQAB\n-----END PUBLIC KEY-----
+    resource :
+      id : department-service
+      token-info-uri : '${rest.security.issuer-uri}/protocol/openid-connect/token/introspect'
+      user-info-uri : '${rest.security.issuer-uri}/protocol/openid-connect/userinfo'
+      jwt.key-value : -----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4tW2IZn+axOw4ByqBGc4yWLcOUBBDiapKddgXdK5MWHpA8yqgmXsxXzwUHFIVTaCY9JvxpYyCkbaPA64nML1oHGxZ10qWzAyYSqFYnZGhZo6P83LDHqqB8Vuqbr5ZjU7EpUKv4+cWi1zE3D5WDsRfhkv+sLIGbd61OhFT7YBA5kBZe1zx8siP7YF6soiZZUAbcGMnN6idxsJr88ClAAiRiK0805U4nbmOUzsltXHsbMnS5Sl8AIFbjW0Sx0VluVQaraVvZj9VGbc634cVzNc7zErVYxfaFkdwd+iHqhEO0aqi7/fFlJE32Ou8DzWO1WIiteIRrBWi+g+aZlaCnLw0QIDAQAB\n-----END PUBLIC KEY-----
     # OAuth client config
-    client:
-      client-id: employee-service
-      client-secret: 25c33006-e1b9-4fc2-a6b9-c43dbc41ecd0
-      user-authorization-uri: ${rest.security.issuer-uri}/protocol/openid-connect/auth
-      access-token-uri: ${rest.security.issuer-uri}/protocol/openid-connect/token
-      scope: openid
-      grant-type: client_credentials
+    client :
+      client-id : employee-service
+      client-secret : 25c33006-e1b9-4fc2-a6b9-c43dbc41ecd0
+      user-authorization-uri : ${rest.security.issuer-uri}/protocol/openid-connect/auth
+      access-token-uri : ${rest.security.issuer-uri}/protocol/openid-connect/token
+      scope : openid
+      grant-type : client_credentials
 
 
 
-management:
-  port: 8000
-  add-application-context-header: false
-  security:
+management :
+  port : 8000
+  add-application-context-header : false
+  security :
     # Disable security on the management port (NOT FOR PRODUCTION)
-    enabled: false
+    enabled : false
 
 
 
-eureka:
-  client:
-    serviceUrl:
-      default: http://localhost:8761/eureka/
-  instance:
-    metadataMap:
+eureka :
+  client :
+    serviceUrl :
+      default : http://localhost:8761/eureka/
+  instance :
+    metadataMap :
       # Support for Spring Boot Admin client discovery
-      management.port: 8000
+      management.port : 8000
 
 
 # Logging Configuration
-logging:
-  level:
-    org.springframework.boot.autoconfigure.logging: INFO
-    org.springframework.security: DEBUG
-    root: INFO
+logging :
+  level :
+    org.springframework.boot.autoconfigure.logging : INFO
+    org.springframework.security : DEBUG
+    root : INFO

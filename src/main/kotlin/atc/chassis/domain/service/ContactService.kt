@@ -10,16 +10,15 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class ContactService(val contactRepository: ContactRepository) {
 
+  fun createContact(contactEntity: ContactEntity): ContactEntity {
+    return contactRepository.save(contactEntity)
+  }
 
-    fun createContact(contactEntity: ContactEntity): ContactEntity {
-        return contactRepository.save(contactEntity)
-    }
+  fun listContacts(): Iterable<ContactEntity> {
+    return contactRepository.findAll()
+  }
 
-    fun listContacts(): Iterable<ContactEntity> {
-        return contactRepository.findAll()
-    }
-
-    fun queryContacts(spec: Specification<ContactEntity>?): Iterable<ContactEntity> {
-        return contactRepository.findAll(spec)
-    }
+  fun queryContacts(spec: Specification<ContactEntity>?): Iterable<ContactEntity> {
+    return contactRepository.findAll(spec)
+  }
 }

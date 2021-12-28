@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler
 
-
 /**
  * Allows for @PreAuthorize annotation processing.
  */
@@ -16,8 +15,7 @@ import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecur
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class MethodSecurityConfig : GlobalMethodSecurityConfiguration() {
 
-    override fun createExpressionHandler(): MethodSecurityExpressionHandler {
-        return OAuth2MethodSecurityExpressionHandler()
-    }
-
+  override fun createExpressionHandler(): MethodSecurityExpressionHandler {
+    return OAuth2MethodSecurityExpressionHandler()
+  }
 }
