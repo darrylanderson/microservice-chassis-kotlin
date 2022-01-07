@@ -1,0 +1,10 @@
+style :
+  NewLineAtEndOfFile :
+    active : false
+  MaxLineLength :
+    maxLineLength : 120
+    active : false
+  NoTabs :
+    active : true
+  WildcardImport :
+    active : false
