@@ -23,7 +23,7 @@ plugins {
   `maven-publish`
 
   // OWASP Dependency Check
-  id("org.owasp.dependencycheck") version "6.5.2"
+  id("org.owasp.dependencycheck") version "6.5.2.1"
 
   // Detekt
   id("io.gitlab.arturbosch.detekt") version "1.19.0"
