@@ -22,6 +22,9 @@ plugins {
   // Publishing
   `maven-publish`
 
+  // OWASP Dependency Check
+  id("org.owasp.dependencycheck") version "6.5.2"
+
   // Detekt
   id("io.gitlab.arturbosch.detekt") version "1.19.0"
 }
@@ -107,6 +110,11 @@ tasks.getByName<Jar>("jar") {
 tasks.withType<BootJar> {
   launchScript()
   classifier = "boot"
+}
+
+dependencyCheck {
+  format = org.owasp.dependencycheck.reporting.ReportGenerator.Format.SARIF
+  failBuildOnCVSS = 7f
 }
 
 detekt {
