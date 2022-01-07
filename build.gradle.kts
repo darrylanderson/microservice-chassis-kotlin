@@ -75,7 +75,7 @@ dependencies {
   kapt("org.springframework.boot:spring-boot-configuration-processor")
 
   // Test vulnerability
-  implementation("org.apache.logging.log4j:log4j-core:2.11.1")
+  implementation("org.apache.logging.log4j:log4j-core:2.17.1")
 
   // OpenAPI (aka Swagger)
   implementation("io.springfox:springfox-swagger2:3.0.0")
