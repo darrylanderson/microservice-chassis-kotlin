@@ -167,5 +167,5 @@ tasks.withType<Jar> {
 
 // Configure the Gradle wrapper
 tasks.withType<Wrapper> {
-  gradleVersion = "7.3"
+  gradleVersion = "7.3.3"
 }
