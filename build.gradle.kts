@@ -87,7 +87,7 @@ dependencies {
 
   // For development
   runtimeOnly("org.springframework.boot:spring-boot-devtools")
-  runtimeOnly("com.h2database:h2:2.0.206")
+  runtimeOnly("com.h2database:h2:2.1.210")
 
   // Testing with JUnit 5 and MockK
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
