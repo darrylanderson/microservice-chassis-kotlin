@@ -66,7 +66,7 @@ dependencies {
 
   // Spring Security
   implementation("org.springframework.boot:spring-boot-starter-security")
-  implementation("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.6.1")
+  implementation("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.6.8")
 
   // Kotlin
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
